@@ -1,0 +1,78 @@
+/* .bg-login{
+    background-image: url(/assets/images/garage.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1500px 1000px;
+} */
+label{
+    font-weight: 500 !important;
+}
+.gray{
+    color: #4B5563 !important;
+}
+.light-gray{
+    color: #929DAB !important;
+}
+.input-group-text{
+    background-color: #FFFFFF !important;
+}
+.w-10{
+    width: 10%;
+}
+.mt-text{
+    margin-top: 2px;
+}
+.btn-black{
+    background-color: #232e3d !important;
+    color: white !important;
+}
+.btn-black:hover{
+    background-color: #161D27 !important;
+    color: white !important;
+}
+.rounded-custom-input{
+    border-top-right-radius: 3px !important;
+    border-bottom-right-radius: 3px !important;
+}
+.rounded-custom-icon{
+    border-top-left-radius: 3px !important;
+    border-bottom-left-radius: 3px !important;
+}
+input::placeholder{
+    color: #929DAB !important;
+}
+.link-custom{
+    color: #104F85 !important;
+}
+.link-custom:hover{
+    text-decoration: underline !important;
+}
+.btn-blue{
+    background-color: #104F85 !important;
+    color: white !important;
+}
+.btn-blue:hover{
+    background-color: #0054A6 !important;
+    color: white !important;
+}
+.separator{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #666;
+    font-weight: 500;
+}
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+    margin: 0 0.75em;
+}
+.mt-icon{
+    margin-top: 11px;
+}
+.bg-navbar{
+    background-color: #182433 !important;
+    color: white !important;
+}
