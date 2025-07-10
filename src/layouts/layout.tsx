@@ -17,10 +17,11 @@ function PrivateRoute({ isAuthenticated, isLoaded }: { isAuthenticated: boolean;
     if(!isLoaded){
         return <div>Loading...</div>;
     }
+    
     return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 }
 
-export default function Layout() {
+export default function Layout(){
     const dispatch = useDispatch<AppDispatch>();
     const { isAuthenticated, isLoaded, user } = useSelector((state: RootState) => state.auth);
 

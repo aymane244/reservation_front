@@ -47,7 +47,8 @@ export default function Navbar(){
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-
+    console.log(user);
+    
     return (
         <div>
             <nav className="navbar navbar-expand-lg bg-navbar align-items-center border-bottom">
