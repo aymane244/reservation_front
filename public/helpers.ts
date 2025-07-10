@@ -1,1 +1,1 @@
-export const url = window.location.hostname === "localhost" ? "http://localhost:8000" : "https://flowsuite.aimane-web-dev.com";
+export const url = window.location.hostname === "localhost" ? "http://localhost:8000" : "https://reservation.aimane-web-dev.com/";
