@@ -13,11 +13,11 @@ import Dashboard from '../user/dashboard';
 import AdminNavbar from './admin/navbar';
 import AdminDashboard from '../admin/dashboard';
 
-function PrivateRoute({ isAuthenticated, isLoaded }: { isAuthenticated: boolean; isLoaded: boolean }) {
+function PrivateRoute({ isAuthenticated, isLoaded }: { isAuthenticated: boolean; isLoaded: boolean }){
     if(!isLoaded){
         return <div>Loading...</div>;
     }
-    
+
     return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 }
 

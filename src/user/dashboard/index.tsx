@@ -10,11 +10,11 @@ export default function Dashboard(){
     const dispatch = useDispatch<AppDispatch>();
     const { isLoaded } = useSelector((state: RootState) => state.auth);
     
-    useEffect(() => {
-        if(!isLoaded){
-            dispatch(fetchUser());
-        }
-    }, [dispatch, isLoaded]);
+    // useEffect(() => {
+    //     if(!isLoaded){
+    //         dispatch(fetchUser());
+    //     }
+    // }, [dispatch, isLoaded]);
 
     return(
         <div>
