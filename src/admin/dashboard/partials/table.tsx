@@ -34,7 +34,7 @@ export default function AdminTable(){
                 </div>
                 <div className="col-md-6 d-flex">
                     <div className="bg-white rounded border p-3 flex-fill">
-                        <p className="fs-5">Derniers utilisateurs inscris</p>
+                        <p className="fs-5">Total Utilisateurs inscris</p>
                         <hr />
                         <AdminBarChart/>
                     </div>
