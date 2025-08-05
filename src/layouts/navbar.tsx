@@ -118,10 +118,10 @@ export default function Navbar(){
                     ) : (
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <Link to="/login" className={`${location.pathname === "/" ? 'active-navbar' : ''} nav-link text-white`}>Login</Link>
+                                <Link to="/login" className={`${location.pathname === "/" ? 'active-navbar' : ''} nav-link text-white`}>Se connecter</Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/register" className={`${location.pathname === "/register" ? 'active-navbar' : ''} nav-link text-white`}>Register</Link>
+                                <Link to="/register" className={`${location.pathname === "/register" ? 'active-navbar' : ''} nav-link text-white`}>S'isncrire</Link>
                             </li>
                         </ul>
                     )}
