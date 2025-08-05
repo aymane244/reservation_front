@@ -3,14 +3,26 @@ import { useState } from "react";
 import { ClipLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { login } from "../features/auth/authSlice";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../features/auth/axiosInstance";
+import { getData } from "../../public/getData";
+import { firstLetterCapital } from "../../public/helpers";
+
+interface Plans{
+    id: number,
+    name: string,
+    price: number,
+}
 
 export default function Register(){
+    const { name } = useParams();
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [plans, setPlans] = useState<Plans[]>([]);
+    const [plan, setPlan] = useState<Plans | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [mainError, setMainError] = useState<string>('');
     const [register, setRegister] = useState({
@@ -20,7 +32,8 @@ export default function Register(){
         password : "",
         confirmed : "",
     });
-
+    console.log(name);
+    
     const [error, setError] = useState({
         first_name : "",
         last_name : "",
@@ -28,6 +41,15 @@ export default function Register(){
         password : "",
         confirmed : "",
     });
+
+    if(!name || name === undefined){
+        getData("api/plans/get", setPlans);
+    }else{
+        getData(`api/plan/${name}`, setPlan);
+    }
+
+    console.log(plan);
+    
 
     const handleData = (name: string, value: string) =>{
         setRegister(formData =>({
@@ -165,7 +187,7 @@ export default function Register(){
             <div className="container">
                 <div className="d-flex justify-content-center align-items-center vh-90">
                     <div className="col-12 col-sm-10 col-md-8 col-lg-5">
-                        <h3 className="text-center">Réservation</h3>
+                        <h3 className="text-center">Inscription</h3>
                         <div className="bg-white rounded border mt-4">
                             <div className="p-5">
                                 {mainError && 
@@ -217,6 +239,18 @@ export default function Register(){
                                                 value={register.confirmed}
                                             />
                                             <span className="text-danger fs-7">{error && error.confirmed}</span>
+                                        </div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-md-12">
+                                            <select className="form-select" aria-label="plans select">
+                                                {!name ? 
+                                                    plans.map((plan, index)=>(
+                                                        <option value={plan.id} key={index}>{firstLetterCapital(plan.name)}</option>
+                                                    )) : 
+                                                    <option value={plan?.id}>{firstLetterCapital(plan?.name)}</option>
+                                                }
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="mb-3 form-check">

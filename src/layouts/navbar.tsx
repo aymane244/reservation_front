@@ -47,7 +47,6 @@ export default function Navbar(){
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-    console.log(user);
     
     return (
         <div>
@@ -56,7 +55,7 @@ export default function Navbar(){
                     <span className="navbar-toggler border-0 pointer" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <FontAwesomeIcon icon={faBars} color={"white"}/>
                     </span>
-                    <a className="navbar-brand color-navbar" href="#">Logo</a>
+                    <a className="navbar-brand color-navbar" href="#"><img src="/assets/images/logo-new.png" alt="logo" className="img-fluid" width="150" height="150" /></a>
                     {auth ? (
                         <>
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -119,10 +118,10 @@ export default function Navbar(){
                     ) : (
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <Link to="/" className={`${location.pathname === "/" ? 'active-navbar' : ''} nav-link`}>Login</Link>
+                                <Link to="/login" className={`${location.pathname === "/" ? 'active-navbar' : ''} nav-link text-white`}>Login</Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/register" className={`${location.pathname === "/register" ? 'active-navbar' : ''} nav-link`}>Register</Link>
+                                <Link to="/register" className={`${location.pathname === "/register" ? 'active-navbar' : ''} nav-link text-white`}>Register</Link>
                             </li>
                         </ul>
                     )}

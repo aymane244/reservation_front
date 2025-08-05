@@ -76,3 +76,9 @@ input::placeholder{
     background-color: #182433 !important;
     color: white !important;
 }
+.deactivate{
+    color: #D5CCCC !important;
+}
+.li-marker::marker{
+    color: #2EA3F2 !important;
+}

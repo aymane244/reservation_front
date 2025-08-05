@@ -55,7 +55,7 @@ export default function AdminNavbar() {
                     <h3 className="text-center">Logo</h3>
                     <div className="mt-4 ms-2">
                         <div className="mb-3">
-                            <a href="" className="d-flex text-decoration-none text-white p-2 active_admin link-hover">
+                            <a href="/admin/dashboard" className="d-flex text-decoration-none text-white p-2 active_admin link-hover">
                                 <span className="me-2"><FontAwesomeIcon icon={faBars} /></span>
                                 <span>Dashboard</span>
                             </a>
@@ -109,7 +109,7 @@ export default function AdminNavbar() {
                         </div>
                         <div className="mb-1">
                             <h6 className="color-navbar mb-2">Plans & Service</h6>
-                            <a href="" className="d-flex text-decoration-none text-white p-2 link-hover">
+                            <a href="/admin/plans" className="d-flex text-decoration-none text-white p-2 link-hover">
                                 <span className="me-2"><FontAwesomeIcon icon={faClipboardCheck} /></span>
                                 <span>Plans</span>
                             </a>
