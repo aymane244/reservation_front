@@ -6,6 +6,7 @@ export const getData = (link, setData, setOtherData) =>{
         const useGetData  = async () => {
             try{
                 const response = await axiosInstance.get(link);
+                console.log(response);
                 
                 if(response.data.status === 200){
                     setData(response.data.data);
