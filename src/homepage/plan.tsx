@@ -42,11 +42,11 @@ export default function Plan(){
                             setSelectedActivityId(val ? parseInt(val) : 1);
                         }}  
                 >
-                    {activities.map((activity, index)=> (
+                    {/* {activities.map((activity, index)=> (
                         <option key={index} value={activity.id}>
                             {firstLetterCapital(activity.name)}
                         </option>
-                    ))}
+                    ))} */}
                 </select>
                 <div className="row m-0">
                     {plans.map((plan, index)=>(
