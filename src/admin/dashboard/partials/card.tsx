@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faCarSide, faClipboardList, faHandHoldingDollar, faSackDollar, faTag, faUser, faUserCheck, faUsers, faUserSlash, faUserTag, faUserXmark } from "@fortawesome/free-solid-svg-icons";
+import { faHandHoldingDollar, faSackDollar, faTag, faUser, faUserCheck, faUserSlash, faUserTag, faUserXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function AdminCard() {
     return (
         <div className="pt-3">
             <div className="row">
-                <div className="col-lg-3 col-md-6 mt-2">
-                    <div className="bg-white rounded border p-3">
-                        <div className="d-flex align-items-center">
+                <div className="col-lg-3 col-md-6 mt-2 d-flex">
+                    <div className="bg-white rounded border p-3 w-100">
+                        <div className="d-flex align-items-start">
                             <div className="bg-primary py-2 px-3 rounded">
                                 <FontAwesomeIcon icon={faUser} color={'white'} />
                             </div>
@@ -18,9 +18,9 @@ export default function AdminCard() {
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-3 col-md-6 mt-2">
-                    <div className="bg-white rounded border p-3">
-                        <div className="d-flex align-items-center">
+                <div className="col-lg-3 col-md-6 mt-2 d-flex">
+                    <div className="bg-white rounded border p-3 w-100">
+                        <div className="d-flex align-items-start">
                             <div className="bg-primary py-2 px-3 rounded">
                                 <FontAwesomeIcon icon={faUserCheck} color={'white'} />
                             </div>
@@ -31,9 +31,9 @@ export default function AdminCard() {
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-3 col-md-6 mt-2">
-                    <div className="bg-white rounded border p-3">
-                        <div className="d-flex align-items-center">
+                <div className="col-lg-3 col-md-6 mt-2 d-flex">
+                    <div className="bg-white rounded border p-3 w-100">
+                        <div className="d-flex align-items-start">
                             <div className="bg-primary py-2 px-3 rounded">
                                 <FontAwesomeIcon icon={faUserXmark} color={'white'} />
                             </div>
@@ -44,9 +44,9 @@ export default function AdminCard() {
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-3 col-md-6 mt-2">
-                    <div className="bg-white rounded border p-3">
-                        <div className="d-flex align-items-center">
+                <div className="col-lg-3 col-md-6 mt-2 d-flex">
+                    <div className="bg-white rounded border p-3 w-100">
+                        <div className="d-flex align-items-start">
                             <div className="bg-primary py-2 px-3 rounded">
                                 <FontAwesomeIcon icon={faUserSlash} color={'white'} />
                             </div>
@@ -57,9 +57,9 @@ export default function AdminCard() {
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-3 col-md-6 mt-2">
-                    <div className="bg-white rounded border p-3">
-                        <div className="d-flex align-items-center">
+                <div className="col-lg-3 col-md-6 mt-2 d-flex">
+                    <div className="bg-white rounded border p-3 w-100">
+                        <div className="d-flex align-items-start">
                             <div className="bg-primary py-2 px-3 rounded">
                                 <FontAwesomeIcon icon={faSackDollar} color={'white'} />
                             </div>
@@ -70,9 +70,9 @@ export default function AdminCard() {
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-3 col-md-6 mt-2">
-                    <div className="bg-white rounded border p-3">
-                        <div className="d-flex align-items-center">
+                <div className="col-lg-3 col-md-6 mt-2 d-flex">
+                    <div className="bg-white rounded border p-3 w-100">
+                        <div className="d-flex align-items-start">
                             <div className="bg-primary py-2 px-3 rounded">
                                 <FontAwesomeIcon icon={faHandHoldingDollar} color={'white'} />
                             </div>
@@ -83,9 +83,9 @@ export default function AdminCard() {
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-3 col-md-6 mt-2">
-                    <div className="bg-white rounded border p-3">
-                        <div className="d-flex align-items-center">
+                <div className="col-lg-3 col-md-6 mt-2 d-flex">
+                    <div className="bg-white rounded border p-3 w-100">
+                        <div className="d-flex align-items-start">
                             <div className="bg-primary py-2 px-3 rounded">
                                 <FontAwesomeIcon icon={faTag} color={'white'} />
                             </div>
@@ -96,9 +96,9 @@ export default function AdminCard() {
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-3 col-md-6 mt-2">
-                    <div className="bg-white rounded border p-3">
-                        <div className="d-flex align-items-center">
+                <div className="col-lg-3 col-md-6 mt-2 d-flex">
+                    <div className="bg-white rounded border p-3 w-100">
+                        <div className="d-flex align-items-start">
                             <div className="bg-primary py-2 px-3 rounded">
                                 <FontAwesomeIcon icon={faUserTag} color={'white'} />
                             </div>

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../app/store";
-import { fetchUser } from "../../features/auth/authSlice";
+import { fetchTenantUser } from "../../features/auth/authSlice";
 import Header from "./partials/header";
 import AdminCard from "./partials/card";
 import AdminChart from "./partials/chart";
@@ -13,7 +13,7 @@ export default function AdminDashboard(){
     
     useEffect(() => {
         if(!isLoaded){
-            dispatch(fetchUser());
+            dispatch(fetchTenantUser());
         }
     }, [dispatch, isLoaded]);
 

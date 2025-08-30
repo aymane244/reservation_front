@@ -50,7 +50,7 @@ export default function AdminNavbar() {
 
     return (
         <div className="h-100 d-inline-block d-flex">
-            <div className="p-3 border-end border-bottom border-2 laptop scrollable-container w-15 bg-navbar">
+            <div className="p-3 border-end border-bottom border-2 laptop scrollable-container w-25 bg-navbar">
                 <div className="offcanvas-body text-white">
                     <h3 className="text-center">Logo</h3>
                     <div className="mt-4 ms-2">
@@ -109,10 +109,16 @@ export default function AdminNavbar() {
                         </div>
                         <div className="mb-1">
                             <h6 className="color-navbar mb-2">Plans & Service</h6>
-                            <a href="/admin/plans" className="d-flex text-decoration-none text-white p-2 link-hover">
+                            <a href="/admin/activities" className="d-flex text-decoration-none text-white p-2 link-hover">
                                 <span className="me-2"><FontAwesomeIcon icon={faClipboardCheck} /></span>
-                                <span>Plans</span>
+                                <span>Activities</span>
                             </a>
+                            <div className="mb-3">
+                                <a href="/admin/plans" className="d-flex text-decoration-none text-white p-2 link-hover">
+                                    <span className="me-2"><FontAwesomeIcon icon={faClipboardCheck} /></span>
+                                    <span>Plans</span>
+                                </a>
+                            </div>
                         </div>
                         <div className="mb-3">
                             <a href="" className="d-flex text-decoration-none text-white p-2 link-hover">

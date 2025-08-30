@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../features/auth/authSlice";
+import { login, setLoading } from "../features/auth/authSlice";
 import { ClipLoader } from "react-spinners";
 import { Link, useNavigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import axiosInstance from "../features/auth/axiosInstance";
+import axiosInstance, { centralAxios } from "../features/auth/axiosInstance";
 
 export default function Login(){
     const dispatch = useDispatch();
@@ -67,29 +67,48 @@ export default function Login(){
             valid = false;
         }
 
-        if(valid){
+       if(valid){
             setIsLoading(true);
 
             try{
-                await axiosInstance.get('/sanctum/csrf-cookie');
-                const response = await axiosInstance.post('/api/user/login', data);
+                await centralAxios.get('/sanctum/csrf-cookie');
+                const response = await centralAxios.post('/api/user/login', data);
 
-                if(response.data.status === "success"){
-                    dispatch(login({
-                        first_name: response.data.user.first_name,
-                        last_name: response.data.user.last_name,
-                        email: response.data.user.email,
-                        is_admin: response.data.user.is_admin,
-                    }));
-                    navigate("/dashboard");
+                if(response.data.status === 'success'){
+                    const user = response.data.user;
+                    const tenantSubdomain = response.data.tenant_subdomain;
+
+                    dispatch(
+                        login({
+                            user: {
+                                first_name: user.first_name,
+                                last_name: user.last_name,
+                                email: user.email,
+                                is_admin: user.is_admin,
+                                activity_name: user.activity?.name || '',
+                                plan_name: user.plan?.name || '',
+                                is_trial: user.is_trial,
+                                expire_date: new Date(user.trial_will_finish),
+                            },
+                            tenantSubdomain,
+                        })
+                    );
+
+                    // Redirect to tenant subdomain
+                    const tenantUrl = window.location.hostname.includes('localhost')
+                    ? `http://${tenantSubdomain}.localhost:3000/dashboard`
+                    : `https://${tenantSubdomain}.reservation.aimane-web-dev.com/dashboard`;
+
+                    window.location.href = tenantUrl;
                 }else{
-                    setIsLoading(false);
+                    dispatch(setLoading(false));
                     setMainError(response.data.message);
+                    console.error('Login failed:', response.data.message);
                 }
-            }catch(error: any){
-                setIsLoading(false);
-                setMainError("Login failed");
-                console.error("Login error:", error);
+            }catch(error){
+                dispatch(setLoading(false));
+                setMainError(error);
+                console.error('Login error:', error);
             }
         }
     }
@@ -97,7 +116,7 @@ export default function Login(){
     return (
         <div className="bg-login">
             <div className="container">
-                <div className="d-flex justify-content-center align-items-center vh-90">
+                <div className="d-flex justify-content-center align-items-center py-5">
                     <div className="col-12 col-sm-10 col-md-8 col-lg-5">
                         <h3 className="text-center">Réservation</h3>
                         <div className="bg-white rounded border mt-4">

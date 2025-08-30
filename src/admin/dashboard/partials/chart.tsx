@@ -6,14 +6,14 @@ export default function AdminChart() {
         <div className="mt-5">
             <div className="row align-items-stretch">
                 <div className="col-lg-8 col-md-6 d-flex">
-                    <div className="bg-white rounded border p-3 flex-fill">
+                    <div className="bg-white rounded border p-3 w-100">
                         <p className="fs-5">Total des Gains</p>
                         <hr />
                         <AdminLineChart/>
                     </div>
                 </div>
                 <div className="col-lg-4 col-md-6 d-flex">
-                    <div className="bg-white rounded border p-3 flex-fill">
+                    <div className="bg-white rounded border p-3 w-100">
                         <p className="fs-5">Top des Plans Vendus</p>
                         <hr />
                         <AdminDoughnutChart/>
