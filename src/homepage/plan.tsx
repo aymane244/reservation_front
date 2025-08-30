@@ -42,14 +42,14 @@ export default function Plan(){
                             setSelectedActivityId(val ? parseInt(val) : 1);
                         }}  
                 >
-                    {/* {activities.map((activity, index)=> (
+                    {activities.map((activity, index)=> (
                         <option key={index} value={activity.id}>
                             {firstLetterCapital(activity.name)}
                         </option>
-                    ))} */}
+                    ))}
                 </select>
                 <div className="row m-0">
-                    {/* {plans.map((plan, index)=>(
+                    {plans.map((plan, index)=>(
                         selectedActivityId === plan.activity_id &&
                         <div className="col-lg-4 col-md-3 col-12 shadow p-0" key={index}>
                             <div className="bg-secondary">
@@ -72,7 +72,7 @@ export default function Plan(){
                                 <Link to={`/register/${plan.name.toLowerCase()}`} className="btn btn-primary text-center">S'abonner</Link>
                             </div>
                         </div>
-                    ))} */}
+                    ))}
                 </div>
             </div>
         </div>
