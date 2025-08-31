@@ -3,19 +3,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
-import axiosInstance from "../../../features/auth/axiosInstance";
-import { logout } from "../../../features/auth/authSlice";
+import { adminLogout } from "../../../features/auth/adminAuthSlice";
+import adminAxios from "../../../features/auth/adminAxios";
 
 export default function AdminSetting(){
     const dispatch = useDispatch<AppDispatch>()
 
     const handleLogout = async () => {
         try{
-            const response = await axiosInstance.post('/api/user/logout');
+            const response = await adminAxios.post('/api/admin/logout');
             
             if(response.data.status === "success"){
-                dispatch(logout());
-                window.location.href = '/';
+                dispatch(adminLogout());
+                window.location.href = '/admin/login';
             }
         }catch(error){
             console.error('Logout error:', error);

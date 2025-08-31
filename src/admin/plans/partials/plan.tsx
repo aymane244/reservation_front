@@ -24,10 +24,9 @@ interface PlanComponent{
     plan : Plan | null
 }
 
-
 export default function Plan({plan} : PlanComponent){
     const [formData, setFormData] = useState<Plan | null>(null);
-    
+
     useEffect(() => {
         if (plan) setFormData(plan);
     }, [plan]);
@@ -51,10 +50,10 @@ export default function Plan({plan} : PlanComponent){
 
         if (field === "description") {
             updatedFeatures[index].key = value
-                .toLowerCase()
-                .trim()
-                .replace(/\s+/g, "_")
-                .replace(/[^\w_]/g, "");
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, "_")
+            .replace(/[^\w_]/g, "");
         }
 
         setFormData({ ...formData, features: updatedFeatures });
@@ -62,7 +61,6 @@ export default function Plan({plan} : PlanComponent){
 
     const handleAddFeature = () => {
         if (!formData) return;
-        console.log("nouvelle_fonctionnalite_" + (formData.features.length + 1));
         
         const newFeature: Features = {
             id: 0,
@@ -105,11 +103,20 @@ export default function Plan({plan} : PlanComponent){
         if (!formData) return;
 
         const featureToDelete = formData.features[index];
-        
-        // Optionally confirm deletion with user:
-        if (!window.confirm('Êtes-vous sûr de supprimer cette fonctionnalité ?')) return;
 
-        try {
+        try{
+            const result = await Swal.fire({
+            title: 'Êtes-vous sûr ?',
+            text: "Cette action supprimera la fonctionnalité définitivement.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Oui, supprimer',
+            cancelButtonText: 'Annuler',
+        });
+
+        if(result.isConfirmed){
             // Call API to delete feature from backend by ID
             await axiosInstance.delete(`/api/plan-features/${featureToDelete.id}`);
 
@@ -125,8 +132,9 @@ export default function Plan({plan} : PlanComponent){
                 timer: 1500,
                 showConfirmButton: false,
             });
-        } catch (error) {
-            console.error('Erreur lors de la suppression:', error);
+        }
+    }catch(error){
+        console.error('Erreur lors de la suppression:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Erreur',
@@ -134,6 +142,7 @@ export default function Plan({plan} : PlanComponent){
             });
         }
     };
+    console.log(plan);
     
     return(
         <div className="mt-4">

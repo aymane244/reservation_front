@@ -6,7 +6,7 @@ import { login } from "../features/auth/authSlice";
 import { Link, useNavigate, useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import axiosInstance from "../features/auth/axiosInstance";
+import axiosInstance, { centralAxios } from "../features/auth/axiosInstance";
 import { getData } from "../../public/getData";
 import { firstLetterCapital } from "../../public/helpers";
 
@@ -14,6 +14,12 @@ interface Plans{
     id: number,
     name: string,
     price: number,
+    activity_id: number,
+}
+
+interface Activities{
+    id: number,
+    name: string,
 }
 
 export default function Register(){
@@ -22,17 +28,21 @@ export default function Register(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [plans, setPlans] = useState<Plans[]>([]);
+    const [activities, setActivities] = useState<Activities[]>([]);
+    const [activity, setActivity] = useState<Activities | null>(null);
     const [plan, setPlan] = useState<Plans | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [mainError, setMainError] = useState<string>('');
+    const [selectedActivityId, setSelectedActivityId] = useState<number | null>(1);
+    const [selectedPlanId, setSelectedPlanId] = useState<number | null>(1);
     const [register, setRegister] = useState({
         first_name : "",
         last_name : "",
         email : "",
         password : "",
         confirmed : "",
+        plan_id : 1,
     });
-    console.log(name);
     
     const [error, setError] = useState({
         first_name : "",
@@ -43,13 +53,10 @@ export default function Register(){
     });
 
     if(!name || name === undefined){
-        getData("api/plans/get", setPlans);
+        getData("api/plans/get", setPlans, setActivities);
     }else{
-        getData(`api/plan/${name}`, setPlan);
+        getData(`api/plan/${name}`, setPlan, setActivity);
     }
-
-    console.log(plan);
-    
 
     const handleData = (name: string, value: string) =>{
         setRegister(formData =>({
@@ -65,6 +72,8 @@ export default function Register(){
             last_name: register.last_name.trim(),
             password: register.password.trim(),
             password_confirmation: register.confirmed.trim(),
+            activity_id: selectedActivityId,
+            plan_id: selectedPlanId,
         }
         
         let valid = true;
@@ -140,44 +149,49 @@ export default function Register(){
 
             valid = false;
         }
-        if(valid){      
+
+        if(valid){
             setLoading(true);
 
             try{
-                await axiosInstance.get('/sanctum/csrf-cookie');
-                const response = await axiosInstance.post('/api/user/register', data);
-                
-                if(response.data.status === "success"){
-                    
-                    setError({
-                        email : "",
-                        first_name : "",
-                        last_name : "",
-                        password : "",
-                        confirmed : "",
-                    });
-                    
-                    dispatch(login({
-                        first_name: response.data.user.first_name,
-                        last_name: response.data.user.first_name,
-                        email: response.data.user.email,
-                        is_admin: response.data.user.is_admin,
-                    }));
-                    setLoading(false);
-                    navigate("/dashboard");
-                    setMainError("");
+                await centralAxios.get('/sanctum/csrf-cookie');
+                const response = await centralAxios.post('/api/user/register', data);
+
+                if(response.data.status === 'success'){
+                    const user = response.data.user;
+                    const tenantSubdomain = response.data.tenant_subdomain;
+
+                    dispatch(
+                        login({
+                            user: {
+                                first_name: user.first_name,
+                                last_name: user.last_name,
+                                email: user.email,
+                                is_admin: user.is_admin,
+                                activity_name: user.activity?.name || '',
+                                plan_name: user.plan?.name || '',
+                                is_trial: user.is_trial,
+                                expire_date: new Date(user.trial_will_finish),
+                            },
+                            tenantSubdomain,
+                        })
+                    );
+
+                    // Redirect to tenant subdomain
+                    const tenantUrl = window.location.hostname.includes('localhost')
+                    ? `http://${tenantSubdomain}.localhost:3000/dashboard`
+                    : `https://${tenantSubdomain}.reservation.aimane-web-dev.com/dashboard`;
+
+                    window.location.href = tenantUrl;
                 }else{
                     setLoading(false);
-                    console.log("error");
+                    setMainError(response.data.message);
+                    console.error('Login failed:', response.data.message);
                 }
-            }catch(error: unknown){
+            }catch(error){
                 setLoading(false);
-                if(axios.isAxiosError(error)){
-                    setMainError(error.response?.data.message)
-                    console.error("Erreur lors de l'inscription :", error.response?.data.message);
-                }else{
-                    console.error("Une erreur inattendue est survenue :", (error as Error).message);
-                }
+                setMainError(error);
+                console.error('Login error:', error);
             }
         }
     }
@@ -185,7 +199,7 @@ export default function Register(){
     return (
         <div className="bg-login">
             <div className="container">
-                <div className="d-flex justify-content-center align-items-center vh-90">
+                <div className="d-flex justify-content-center align-items-center py-5">
                     <div className="col-12 col-sm-10 col-md-8 col-lg-5">
                         <h3 className="text-center">Inscription</h3>
                         <div className="bg-white rounded border mt-4">
@@ -199,7 +213,7 @@ export default function Register(){
                                 <form>
                                     <div className="row mb-3">
                                         <div className="col-md-6">
-                                            <label htmlFor="first_name" className="form-label gray">Prénom</label>
+                                            <label htmlFor="first_name" className="form-label gray fs-7">Prénom</label>
                                             <input type="text" className="form-control" placeholder="John" aria-label="first_name"
                                                 onChange={(e) => handleData("first_name", e.target.value)}
                                                 value={register.first_name}
@@ -207,7 +221,7 @@ export default function Register(){
                                             <span className="text-danger fs-7">{error && error.first_name}</span>
                                         </div>
                                         <div className="col-md-6">
-                                            <label htmlFor="last_name" className="form-label gray">Nom</label>
+                                            <label htmlFor="last_name" className="form-label gray fs-7">Nom</label>
                                             <input type="email" className="form-control" placeholder="Doe" aria-label="last_name"
                                                 onChange={(e) => handleData("last_name", e.target.value)}
                                                 value={register.last_name}
@@ -216,7 +230,7 @@ export default function Register(){
                                         </div>
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="email" className="form-label gray">Adresse email</label>
+                                        <label htmlFor="email" className="form-label gray fs-7">Adresse email</label>
                                         <input type="email" className="form-control" placeholder="John.doe@example.com" aria-label="email" aria-describedby="email-addon"
                                             onChange={(e) => handleData("email", e.target.value)}
                                             value={register.email}
@@ -225,15 +239,15 @@ export default function Register(){
                                     </div>
                                     <div className="row mb-3">
                                         <div className="col-md-6">
-                                            <label htmlFor="password" className="form-label gray">Mot de passe</label>
+                                            <label htmlFor="password" className="form-label gray fs-7">Mot de passe</label>
                                             <input type="password" className="form-control" aria-label="password"
                                                 onChange={(e) => handleData("password", e.target.value)}
                                                 value={register.password}
                                             />
-                                        <span className="text-danger fs-7">{error && error.password}</span>
+                                            <span className="text-danger fs-7">{error && error.password}</span>
                                         </div>
                                         <div className="col-md-6">
-                                            <label htmlFor="confirmed" className="form-label gray">Mot de passe</label>
+                                            <label htmlFor="confirmed" className="form-label gray fs-7">Confirmer Mot de passe</label>
                                             <input type="password" className="form-control" aria-label="confirmed"
                                                 onChange={(e) => handleData("confirmed", e.target.value)}
                                                 value={register.confirmed}
@@ -242,10 +256,41 @@ export default function Register(){
                                         </div>
                                     </div>
                                     <div className="row mb-3">
+                                        <label className="form-label gray">Plan</label>
                                         <div className="col-md-12">
-                                            <select className="form-select" aria-label="plans select">
+                                            <select
+                                                className="form-select"
+                                                aria-label="Activity Select"
+                                                value={selectedActivityId ?? ""}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    setSelectedActivityId(val ? parseInt(val) : 1);
+                                                }}  
+                                            >
+                                                {!name ? 
+                                                    activities.map((activity, index)=> (
+                                                        <option key={index} value={activity.id}>
+                                                            {firstLetterCapital(activity.name)}
+                                                        </option>
+                                                    )) : 
+                                                    <option value={activity?.id}>{firstLetterCapital(activity?.name)}</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <div className="col-md-12">
+                                            <select 
+                                                className="form-select" 
+                                                aria-label="plans select"
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    setSelectedPlanId(val ? parseInt(val) : 1);
+                                                }} 
+                                            >
                                                 {!name ? 
                                                     plans.map((plan, index)=>(
+                                                        selectedActivityId === plan.activity_id &&
                                                         <option value={plan.id} key={index}>{firstLetterCapital(plan.name)}</option>
                                                     )) : 
                                                     <option value={plan?.id}>{firstLetterCapital(plan?.name)}</option>

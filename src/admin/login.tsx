@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../features/auth/authSlice";
 import { ClipLoader } from "react-spinners";
 import { Link, useNavigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
-import axiosInstance from "../features/auth/axiosInstance";
+import { adminLogin } from "../features/auth/adminAuthSlice";
+import adminAxios, { setAdminToken } from "../features/auth/adminAxios";
 
 export default function AdminLogin(){
     const dispatch = useDispatch();
@@ -68,16 +68,21 @@ export default function AdminLogin(){
             setIsLoading(true);
 
             try{
-                await axiosInstance.get('/sanctum/csrf-cookie');
-                const response = await axiosInstance.post('/api/user/login', data);
-
+                const response = await adminAxios.post('/api/admin/login', data);
+                console.log(response);
+                
                 if(response.data.status === "success"){
-                    dispatch(login({
-                        first_name: response.data.user.first_name,
-                        last_name: response.data.user.last_name,
-                        email: response.data.user.email,
-                        is_admin: response.data.user.is_admin,
+                    setAdminToken(response.data.token);
+                    localStorage.setItem('admin_token', response.data.token);
+
+                    dispatch(adminLogin({
+                        first_name: response.data.admin.first_name,
+                        last_name: response.data.admin.last_name,
+                        email: response.data.admin.email,
+                        is_super_admin: response.data.admin.is_super_admin,
+                        token: response.data.token
                     }));
+
                     navigate("/admin/dashboard");
                 }else{
                     setIsLoading(false);

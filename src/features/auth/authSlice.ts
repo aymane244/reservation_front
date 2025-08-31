@@ -1,72 +1,95 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axiosInstance from './axiosInstance';
+import { tenantAxios } from './axiosInstance';
+
+interface User {
+    first_name: string;
+    last_name: string;
+    email: string;
+    is_admin: boolean;
+    activity_name: string;
+    plan_name: string;
+    is_trial: boolean;
+    expire_date: Date;
+}
 
 interface AuthState {
     isAuthenticated: boolean;
     isLoaded: boolean;
     isLoading: boolean;
-    user: null | { first_name: string; last_name: string; email: string, is_admin: boolean, };
+    user: User | null;
+    tenantSubdomain: string | null;
 }
-
-export const fetchUser = createAsyncThunk(
-    'auth/fetchUser',
-    async (_, { rejectWithValue }) => {
-        try {
-            const response = await axiosInstance.get('/api/user/get');
-            return response.data.user;
-        } catch (error: any) {
-            if (error.response?.status === 401) {
-                // User not logged in — this is expected, no error
-                return rejectWithValue(null);
-            }
-            // Other errors, treat normally
-            return rejectWithValue('Failed to fetch user');
-        }
-    }
-);
 
 const initialState: AuthState = {
     isAuthenticated: false,
     isLoaded: false,
     isLoading: false,
     user: null,
+    tenantSubdomain: null,
 };
+
+// Fetch tenant user after redirection
+export const fetchTenantUser = createAsyncThunk<User | null>(
+    'auth/fetchTenantUser',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await tenantAxios.get('/api/user/get');
+            const user = response.data.user;
+
+            if (!user) return null;
+
+            return {
+                ...user,
+                activity_name: user.activity?.name || '',
+                plan_name: user.plan?.name || '',
+                expire_date: new Date(user.trial_will_finish),
+            };
+        } catch (error: any) {
+            return rejectWithValue(null);
+        }
+    }
+);
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login(state, action: PayloadAction<{ first_name: string; last_name: string; email: string, is_admin: boolean }>) {
+        setLoading(state, action: PayloadAction<boolean>) {
+            state.isLoading = action.payload;
+        },
+        login(state, action: PayloadAction<{ user: User; tenantSubdomain: string }>) {
             state.isAuthenticated = true;
-            state.user = action.payload;
+            state.user = action.payload.user;
+            state.tenantSubdomain = action.payload.tenantSubdomain;
             state.isLoaded = true;
         },
         logout(state) {
             state.isAuthenticated = false;
             state.user = null;
+            state.tenantSubdomain = null;
             state.isLoaded = true;
         },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchUser.pending, (state) => {
+            .addCase(fetchTenantUser.pending, (state) => {
                 state.isLoaded = false;
-                state.isLoading = false;
+                state.isLoading = true;
             })
-            .addCase(fetchUser.fulfilled, (state, action) => {
-                state.isAuthenticated = true;
+            .addCase(fetchTenantUser.fulfilled, (state, action) => {
+                state.isAuthenticated = !!action.payload;
                 state.user = action.payload;
                 state.isLoaded = true;
                 state.isLoading = false;
             })
-            .addCase(fetchUser.rejected, (state) => {
+            .addCase(fetchTenantUser.rejected, (state) => {
                 state.isAuthenticated = false;
                 state.user = null;
                 state.isLoaded = true;
                 state.isLoading = false;
             });
-    }
+    },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, setLoading } = authSlice.actions;
 export default authSlice.reducer;
