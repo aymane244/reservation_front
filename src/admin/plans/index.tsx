@@ -130,12 +130,13 @@ export default function AdminPlans(){
                         </div>
                     )}
                     { selectedActivityId !== null && plan && plan.features.length > 0 ? (
-    <Plan plan={plan} />
-) : (
-    <div className="text-center">
-        Pas de fonctionnalité pour cette activité
-    </div>
-) }
+                        <Plan plan={plan} />
+                        ) : (
+                            <div className="text-center">
+                                Pas de fonctionnalité pour cette activité
+                            </div>
+                        ) 
+                    }
                </div>
             </div>
         </div>

@@ -300,20 +300,20 @@ export default function AdminActivities(){
                                                     onClick={() => {
                                                         setEditingId(activity.id);
                                                         setEditingName(activity.name);
-                                                    }}
+                                                    } } 
                                                 />
-                                                { activity.name === "contrôle technique" ? "" :    
+                                                {activity.name === "contrôle technique" ? "" :
                                                     <FontAwesomeIcon
                                                         icon={faTrashAlt}
                                                         className="text-danger fs-5 ms-3 pointer"
-                                                        onClick={() => deleteActivity(activity.id)}
+                                                        onClick={() => deleteActivity(activity.id)} 
                                                     />
                                                 }
                                                 <FontAwesomeIcon
                                                     icon={faPlus}
                                                     className="text-primary fs-5 ms-3 pointer"
                                                     title="Ajouter un plan"
-                                                    onClick={() => openPlanModal(activity.id)}
+                                                    onClick={() => openPlanModal(activity.id)} 
                                                 />
                                             </div>
                                         )}
